@@ -1,0 +1,79 @@
+{
+  "_from": "react-component-countdown-timer",
+  "_id": "react-component-countdown-timer@0.1.4",
+  "_inBundle": false,
+  "_integrity": "sha512-iYL2IsaDzcN4nA9zbNTYFVezP8gldmdMykJMyKxNRlWo9pk6HXXvGIpMJI0BZ0wuI6v7ZMTqnT+Pkye8NgXJ0w==",
+  "_location": "/react-component-countdown-timer",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-component-countdown-timer",
+    "name": "react-component-countdown-timer",
+    "escapedName": "react-component-countdown-timer",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-component-countdown-timer/-/react-component-countdown-timer-0.1.4.tgz",
+  "_shasum": "b64f988d7b3559789810d19606755293e86e6678",
+  "_spec": "react-component-countdown-timer",
+  "_where": "C:\\Users\\55519\\Documents\\dbservertest-client",
+  "author": {
+    "name": "Majid Savalanpour",
+    "email": "m.savalanpour@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/savalanpour/react-component-countdown-timer/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Count down timer component for react",
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "concurrently": "^3.5.1",
+    "css-loader": "^3.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.9.4",
+    "prop-types": "^15.6.2",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "homepage": "https://github.com/savalanpour/react-component-countdown-timer",
+  "keywords": [],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "name": "react-component-countdown-timer",
+  "peerDependencies": {
+    "react": "^15.3.0 || ^16.2.0",
+    "react-dom": "^15.3.0 || ^16.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/savalanpour/react-component-countdown-timer.git"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run lib:watch\" \"npm run docs\"",
+    "docs": "webpack-dev-server --mode development",
+    "docs:prod": "webpack --mode production",
+    "lib": "babel src/lib -d lib --copy-files",
+    "lib:watch": "babel src/lib -w -d lib --copy-files"
+  },
+  "version": "0.1.4"
+}
