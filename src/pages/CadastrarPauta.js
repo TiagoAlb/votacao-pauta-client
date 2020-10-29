@@ -102,7 +102,6 @@ export default function CadastrarPauta(props) {
                             multiline
                             fullWidth
                             required
-                            autoFocus
                             className={classes.textField}
                             rows={5}
                             placeholder="Digite aqui o texto da pauta..."
