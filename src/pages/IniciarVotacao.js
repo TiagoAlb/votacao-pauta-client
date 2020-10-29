@@ -9,7 +9,7 @@ import PautaService from '../services/PautaService'
 import HowToVote from '@material-ui/icons/HowToVote'
 import TextField from '@material-ui/core/TextField'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
     },
@@ -29,8 +29,13 @@ const useStyles = makeStyles({
     textField: {
         width: 220,
         float: 'right'
+    },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+        textAlign: 'justify'
     }
-})
+}))
 
 function getDateNow() {
     let today = new Date()
@@ -123,7 +128,7 @@ export default function IniciarVotacao() {
                     <Typography className={classes.pos} color="textSecondary">
                         Autor: {autor.nome}
                     </Typography>
-                    <Typography variant="body2" component="p">
+                    <Typography className={classes.secondaryHeading}>
                         {pauta.descricao}
                     </Typography>
                 </CardContent>
