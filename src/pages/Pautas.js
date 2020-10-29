@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
         verticalAlign: 'middle',
         textAlign: 'justify'
     },
+    accordionIcon: {
+        marginLeft: theme.spacing(2)
+    }
 }))
 
 function Alert(props) {
@@ -133,7 +136,7 @@ export default function Pautas() {
                         expanded={expanded === key}
                         onChange={handleChange(key)} key={key}>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
+                            expandIcon={<ExpandMoreIcon className={classes.accordionIcon} />}
                             aria-controls={key + '-content'}
                             id={key + '-header'}
                         >
@@ -144,7 +147,6 @@ export default function Pautas() {
                                 clickable
                                 color="primary"
                                 title="Autor"
-                                deleteIcon={<DoneIcon />}
                                 variant="outlined"
                             />
                         </AccordionSummary>

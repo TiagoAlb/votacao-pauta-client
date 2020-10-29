@@ -12,9 +12,7 @@ const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
-        marginTop: theme.spacing(8),
-        padding: theme.spacing(3)
+        display: 'flex'
     },
     content: {
         flexGrow: 1,
@@ -22,7 +20,9 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
         }),
-        marginLeft: -drawerWidth
+        marginLeft: -drawerWidth,
+        padding: theme.spacing(3),
+        marginTop: theme.spacing(8)
     },
     contentShift: {
         transition: theme.transitions.create('margin', {

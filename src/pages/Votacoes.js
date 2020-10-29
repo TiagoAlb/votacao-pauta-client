@@ -69,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiChip-root': {
             backgroundColor: '#d32f2f'
         }
+    },
+    accordionIcon: {
+        marginLeft: theme.spacing(2)
     }
 }))
 
@@ -108,7 +111,6 @@ export default function Votacoes(props) {
     }
 
     const postVoto = (idVotacao, voto) => {
-        console.log(props.user)
         votacaoService.postVoto(idVotacao, props.user.id, voto,
             (success) => {
                 alert('Voto realizado com sucesso!')
@@ -150,7 +152,7 @@ export default function Votacoes(props) {
                         expanded={expanded === key}
                         onChange={handleChange(key, prop)} key={key}>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
+                            expandIcon={<ExpandMoreIcon className={classes.accordionIcon} />}
                             aria-controls={key + '-content'}
                             id={key + '-header'}
                         >
