@@ -21,7 +21,9 @@ export default class Rest {
                 } else {
                     error(res)
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     getVotacaoStatus(id, success, error) {
@@ -38,7 +40,9 @@ export default class Rest {
                 } else {
                     error(res)
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     getList(success, error) {
@@ -55,7 +59,9 @@ export default class Rest {
                 } else {
                     error(res)
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     getPagedList(page, success, error) {
@@ -72,7 +78,9 @@ export default class Rest {
                 } else {
                     error(res)
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     postVotacao(id, minutes, success, error) {
@@ -94,7 +102,9 @@ export default class Rest {
                         error(err.message)
                     }
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     postVoto(votacaoId, associadoId, voto, success, error) {
@@ -116,7 +126,9 @@ export default class Rest {
                         error(err.message)
                     }
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     post(item, success, error) {
@@ -138,18 +150,23 @@ export default class Rest {
                         error(err.message)
                     }
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     postNoAuth(item, success, error) {
+        console.log('postNoAuth')
         const options = {
             headers: {
                 'Content-Type': 'application/json'
             }
         }
 
-        axios.post(`${this.url}`, item, options)
+        axios.post(this.url, item, options)
             .then(res => {
+                console.log('AQUI')
+                console.log(res)
                 if (res.status === 201) {
                     success(res.data)
                 } else {
@@ -160,7 +177,9 @@ export default class Rest {
                         error(err.message)
                     }
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     delete(id, sucesso, erro) {
@@ -177,140 +196,20 @@ export default class Rest {
                 resposta.json().then(erro)
             }
 
+        }).catch(err => {
+            error(this.handleCatchError(err))
         })
     }
 
-    create(item, success, error) {
-        fetch(this.url, {
-            method: "POST",
-            headers: new Headers({
-                'Authorization': loginService.getAuthorization(),
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify(item)
-        }).then((result) => {
-            console.log(result)
-            if (result.ok) {
-                result.json().then(success)
-            } else {
-                result.json().then(
-                    (errorResult) => error(errorResult)
-                )
-            }
-        })
-    }
+    handleCatchError(error) {
+        console.log(error.response)
+        if (error.response) {
+            const err = error.response.data
+            if (err.errors && err.errors.length > 0)
+                return err.message + '\n' + err.errors[0]
 
-    update(item, step, success, error) {
-        fetch(`${this.url}/${item.id}?step=${step}`, {
-            method: "PUT",
-            headers: new Headers({
-                'Authorization': loginService.getAuthorization(),
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify(item)
-        }).then((result) => {
-            if (result.ok) {
-                result.json().then(success)
-            } else {
-                result.json().then(
-                    (errorResult) => error(errorResult)
-                )
-            }
-
-        })
-    }
-
-    insertImages(id, file, success, error) {
-        fetch(`${this.url}/${id}/images`, {
-            method: "PUT",
-            body: file
-        }).then((result) => {
-            if (result.ok) {
-                result.json().then(success)
-            } else {
-                result.json().then(
-                    (errorResult) => error(errorResult)
-                )
-            }
-        })
-    }
-
-    uploadFileProgress(id, file, uploading, started, finished, error) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest()
-
-            // let fd = new FormData()
-            // adicione ao fd as demais informações que você pretende enviar por POST
-            // ao servidor, além do(s) arquivo(s)
-
-            // agora é hora de adicionarmos o(s) arquivo(s)
-            // fd.append('the-file', file) // nome para referência ao arquivo no formulário
-            xhr.open('PUT', `${this.url}/${id}/images`) // path da rota no servidor
-            xhr.setRequestHeader('Authorization', loginService.getAuthorization())
-
-            xhr.onerror = reject // em caso de erro, rejeitamos a promise
-            xhr.onload = event => {
-                // o envio ocorreu com sucesso
-                console.log(event)
-                resolve() // resolvemos nossa promise
-                finished()
-            }
-
-            if (xhr.upload) {
-                // caso tenhamos acesso a esta informação
-                xhr.upload.onloadstart = () => {
-                    started()
-                }
-                xhr.upload.onprogress = progress => {
-                    uploading(Math.round((progress.loaded * 100) / progress.total) + '%')
-                }
-                xhr.upload.onerror = () => {
-                    error()
-                }
-            } else {
-                // tratamento em navegadores que não suportam xhr.upload
-            }
-
-            xhr.send(file) // iniciando a requisição, enviando o FormData
-        })
-    }
-
-    listarPaginado(pagina, sucesso, erro) {
-
-        let trataFetch = (resultado) => {
-            if (resultado.ok) {
-                resultado.json().then(sucesso)
-            } else {
-                resultado.json().then(
-                    (resultadoErro) => erro(resultadoErro)
-                )
-            }
+            return err.message
         }
-
-        fetch(this.url + "?pagina=" + pagina, {
-            headers: new Headers({
-                'Authorization': loginService.getAuthorization(),
-
-            }),
-            method: "GET"
-        }).then(trataFetch)
-    }
-
-    read(id, success, error) {
-        let treatFetch = (result) => {
-            if (result.ok) {
-                result.json().then(success)
-            } else {
-                result.json().then(
-                    (resultError) => error(resultError)
-                )
-            }
-        }
-        fetch(`${this.url}/${id}`, {
-            headers: new Headers({
-                'Authorization': loginService.getAuthorization(),
-            }),
-            method: "GET"
-        }).then(treatFetch)
+        return error.message
     }
 }

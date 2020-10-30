@@ -54,17 +54,24 @@ export default function CadastrarPauta(props) {
         if (reason === 'clickaway') {
             return
         }
-
-        setSnackbarConfig({ open: false, message: '', severity: 'error' })
+        setSnackbarConfig({ open: false, message: snackbarConfig.message, severity: snackbarConfig.severity })
+        if (snackbarConfig.severity === 'success') {
+            window.location.href = '/pautas'
+        }
     }
 
-    const postPauta = () => {
-        pautaService.post(pauta, (success) => {
-            setSnackbarConfig({ open: true, message: 'Pauta criada com sucesso!', severity: 'success' })
-            window.location.href = "/pautas"
-        }, (error) => {
-            setSnackbarConfig({ open: true, message: 'Erro ao cadastrar pauta! Verifique os campos e tente novamente.', severity: 'error' })
-        })
+    const postPauta = (e) => {
+        e.preventDefault()
+        try {
+            pautaService.post(pauta,
+                (success) => {
+                    setSnackbarConfig({ open: true, message: 'Pauta criada com sucesso!', severity: 'success' })
+                }, (error) => {
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                })
+        } catch (error) {
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
+        }
     }
 
     return (
@@ -82,7 +89,7 @@ export default function CadastrarPauta(props) {
                             startIcon={<AddCircleOutlineIcon />}
                         >
                             Cadastrar
-                </Button>
+                        </Button>
                         <TextField
                             label="Título"
                             id="outlined-size-small"
@@ -119,7 +126,7 @@ export default function CadastrarPauta(props) {
                     </form>
                 </CardContent>
             </Card>
-            <Snackbar open={snackbarConfig.open} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={snackbarConfig.open} autoHideDuration={5000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity={snackbarConfig.severity}>
                     {snackbarConfig.message}
                 </Alert>

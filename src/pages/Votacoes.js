@@ -95,37 +95,50 @@ export default function Votacoes(props) {
     const votacaoService = new VotacaoService()
 
     const listVotacoes = () => {
-        votacaoService.getPagedList(page, (success) => {
-            const content = success.content
+        try {
+            votacaoService.getPagedList(page, (success) => {
+                const content = success.content
 
-            content.map(votacao => {
-                votacao.pauta.titulo = votacao.pauta.titulo.toUpperCase()
-                setVotacoes(votacoes => [...votacoes, votacao])
-            })
+                content.map(votacao => {
+                    votacao.pauta.titulo = votacao.pauta.titulo.toUpperCase()
+                    setVotacoes(votacoes => [...votacoes, votacao])
+                })
 
-            setPage(page + 1)
-            setHasMore(!success.last)
-        }, (error) => {
-            alert(error)
-        })
-    }
-
-    const postVoto = (idVotacao, voto) => {
-        votacaoService.postVoto(idVotacao, props.user.id, voto,
-            (success) => {
-                alert('Voto realizado com sucesso!')
+                setPage(page + 1)
+                setHasMore(!success.last)
             }, (error) => {
                 alert(error)
             })
+        } catch (error) {
+            alert(error)
+        }
+    }
+
+    const postVoto = (idVotacao, voto) => {
+        try {
+            votacaoService.postVoto(idVotacao, props.user.id, voto,
+                (success) => {
+                    alert('Voto realizado com sucesso!')
+                }, (error) => {
+                    alert(error)
+                })
+        } catch (error) {
+            alert(error)
+        }
     }
 
     const getVotacaoStatus = (id) => {
-        votacaoService.getVotacaoStatus(id, (success) => {
-            console.log(success)
-            setVotacaoStatus(success)
-        }, (error) => {
+        try {
+            votacaoService.getVotacaoStatus(id, (success) => {
+                console.log(success)
+                setVotacaoStatus(success)
+            }, (error) => {
+                alert(error)
+            })
+        } catch (error) {
             alert(error)
-        })
+        }
+
     }
 
     useEffect(() => {

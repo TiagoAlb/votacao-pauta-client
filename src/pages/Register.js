@@ -40,23 +40,23 @@ export default function Register() {
 
     const associadoService = new AssociadoService()
 
-    const handleRegister = () => {
+    const handleRegister = (e) => {
+        e.preventDefault()
         if (passwordConfirm !== associado.newPassword) {
             alert('As senhas informadas não conferem!')
             return false
         } else {
             try {
                 associadoService.postNoAuth(associado, (success) => {
-                    alert(success)
                     alert('Associado cadastrado com sucesso!')
-                    window.location.href = "/"
+                    window.location.href = '/'
                 }, (error) => {
                     alert(error)
-                    alert('Erro ao cadastrar associado! Verifique as informações digitadas.')
+                    return false
                 })
-            } catch (err) {
-                alert(err)
-                console.log(err)
+            } catch (error) {
+                console.log(error)
+                return false
             }
         }
     }
@@ -81,7 +81,7 @@ export default function Register() {
                 <Typography component="h1" variant="h5">
                     Cadastre-se
                 </Typography>
-                <form className={classes.form} onSubmit={handleRegister}>
+                <form autoComplete="off" className={classes.form} onSubmit={handleRegister}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -90,7 +90,6 @@ export default function Register() {
                         id="nome"
                         label="Nome"
                         name="nome"
-                        autoComplete="nome"
                         onChange={e => handleAssociadoChange(e, 'nome')}
                         autoFocus
                     />
@@ -103,7 +102,6 @@ export default function Register() {
                         label="CNPJ/CPF"
                         name="cnpjCpf"
                         onChange={e => handleAssociadoChange(e, 'cnpjCpf')}
-                        autoFocus
                     />
                     <TextField
                         variant="outlined"
@@ -113,9 +111,7 @@ export default function Register() {
                         id="email"
                         label="Email"
                         name="email"
-                        autoComplete="email"
                         onChange={e => handleAssociadoChange(e, 'email')}
-                        autoFocus
                     />
                     <TextField
                         variant="outlined"
@@ -127,7 +123,6 @@ export default function Register() {
                         type="password"
                         id="newPassword"
                         onChange={e => handleAssociadoChange(e, 'newPassword')}
-                        autoComplete="current-password"
                     />
                     <TextField
                         variant="outlined"
@@ -139,15 +134,13 @@ export default function Register() {
                         type="password"
                         id="passwordConfirm"
                         onChange={e => setPasswordConfirm(e.target.value)}
-                        autoComplete="current-password"
                     />
                     <Button
-                        type="button"
+                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={handleRegister}
                     >
                         Cadastrar
                     </Button>

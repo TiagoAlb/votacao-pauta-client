@@ -76,12 +76,15 @@ export default function IniciarVotacao() {
         if (minutes < 1) {
             alert('O tempo de votação não pode ser menor do que 1 minuto!')
         } else {
-            pautaService.postVotacao(id, minutes, (success) => {
-                alert(success.message)
-            }, (error) => {
-                console.log(error)
+            try {
+                pautaService.postVotacao(id, minutes, (success) => {
+                    alert(success.message)
+                }, (error) => {
+                    alert(error)
+                })
+            } catch (error) {
                 alert(error)
-            })
+            }
         }
     }
 
