@@ -7,6 +7,7 @@ import AppBar from '../components/AppBar'
 import Drawer from '../components/Drawer'
 import loginService from '../services/Login'
 import AuthenticatedRoutes from '../routes/authenticated'
+import Snackbar from '../components/Snackbar'
 
 const drawerWidth = 240
 
@@ -37,17 +38,22 @@ export default function Authenticated() {
     const classes = useStyles()
     const [open, setOpen] = useState(true)
     const [user, setUser] = useState(null)
+    const [snackbarConfig, setSnackbarConfig] = useState({ open: false, message: '', severity: 'error' })
 
     const handleDrawerOpen = () => {
         setOpen(!open)
     }
 
     const validateLogin = () => {
-        loginService.validateLogin((success) => {
-            setUser(success)
-        }, (error) => {
-            console.log(error)
-        })
+        try {
+            loginService.validateLogin((success) => {
+                setUser(success)
+            }, (error) => {
+                setSnackbarConfig({ open: true, message: error, severity: 'error' })
+            })
+        } catch (error) {
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
+        }
     }
 
     useEffect(() => {
@@ -80,6 +86,7 @@ export default function Authenticated() {
                     })}
                 </Switch>
             </main>
+            <Snackbar config={snackbarConfig} setConfig={setSnackbarConfig} />
         </div>
     )
 }

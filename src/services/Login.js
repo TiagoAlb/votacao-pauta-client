@@ -14,13 +14,15 @@ class Login {
             .then(res => {
                 if (res.status === 200) {
                     this.token = res.headers.token
-                    localStorage.setItem("token", this.token)
+                    localStorage.setItem('token', this.token)
                     this.data = res.data
                     success(this.data)
                 } else {
-                    res.json().then(error)
+                    error(res)
                 }
-            }).catch(error)
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
     }
 
     validateLogin(success, error) {
@@ -34,12 +36,16 @@ class Login {
             .then(res => {
                 if (res.status === 200) {
                     this.data = res.data
-                    this.token = localStorage.getItem("token")
+                    this.token = localStorage.getItem('token')
                     success(this.data)
                 } else {
-                    res.json().then(error)
+                    this.logout()
+                    error(res)
                 }
-            }).catch(error)
+            }).catch(err => {
+                this.logout()
+                error(this.handleCatchError(err))
+            })
     }
 
     logout() {
@@ -48,16 +54,16 @@ class Login {
     }
 
     getAuthorizationGet() {
-        return "token=" + this.token
+        return 'token=' + this.token
     }
 
     getAuthorization() {
         this.token = localStorage.getItem('token')
 
         if (this.token)
-            return "Bearer " + this.token
+            return 'Bearer ' + this.token
         else
-            return "Basic " + base64.encode(this.email + ":" + this.password)
+            return 'Basic ' + base64.encode(this.email + ':' + this.password)
     }
 
     logged() {
@@ -69,6 +75,17 @@ class Login {
 
     getUser() {
         return this.data.id
+    }
+
+    handleCatchError(error) {
+        if (error.response) {
+            const err = error.response.data
+            if (err.errors && err.errors.length > 0)
+                return err.message + '\n' + err.errors[0]
+
+            return err.message
+        }
+        return error.message
     }
 }
 

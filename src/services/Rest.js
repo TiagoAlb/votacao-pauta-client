@@ -45,6 +45,25 @@ export default class Rest {
             })
     }
 
+    getAssociadoVotou(id, success, error) {
+        const options = {
+            headers: {
+                'Authorization': loginService.getAuthorization()
+            }
+        }
+
+        axios.get(`${this.url}/${id}/associados/voto`, options)
+            .then(res => {
+                if (res.status === 200) {
+                    success(res.data)
+                } else {
+                    error(res)
+                }
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
+    }
+
     getList(success, error) {
         const options = {
             headers: {
@@ -107,14 +126,14 @@ export default class Rest {
             })
     }
 
-    postVoto(votacaoId, associadoId, voto, success, error) {
+    postVoto(votacaoId, voto, success, error) {
         const options = {
             headers: {
                 'Authorization': loginService.getAuthorization()
             }
         }
 
-        axios.post(`${this.url}${votacaoId}/associados/${associadoId}/votos?voto=${voto}`, {}, options)
+        axios.post(`${this.url}${votacaoId}/votos?voto=${voto}`, {}, options)
             .then(res => {
                 if (res.status === 201) {
                     success(res.data)
@@ -202,7 +221,6 @@ export default class Rest {
     }
 
     handleCatchError(error) {
-        console.log(error.response)
         if (error.response) {
             const err = error.response.data
             if (err.errors && err.errors.length > 0)

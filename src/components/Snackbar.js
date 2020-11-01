@@ -6,18 +6,19 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
-export default function SnackbarComponent(props) {
+export default function CustomSnackbar(props) {
     const [open, setOpen] = useState(props.config.open)
+
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return
         }
 
-        setOpen(false)
+        props.setConfig({ open: false, message: props.config.message, severity: props.config.severity })
     }
 
     return (
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={props.config.open} autoHideDuration={5000} onClose={handleClose}>
             <Alert onClose={handleClose} severity={props.config.severity}>
                 {props.config.message}
             </Alert>

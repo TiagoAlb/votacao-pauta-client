@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container'
 import NTConsultLogo from '../assets/img/nt_consult_logo.png'
 import SicrediLogo from '../assets/img/sicredi_logo.png'
 import AssociadoService from '../services/AssociadoService'
+import Snackbar from '../components/Snackbar'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -37,25 +38,27 @@ export default function Register() {
         newPassword: ''
     })
     const [passwordConfirm, setPasswordConfirm] = useState('')
+    const [snackbarConfig, setSnackbarConfig] = useState({ open: false, message: '', severity: 'error' })
 
     const associadoService = new AssociadoService()
 
     const handleRegister = (e) => {
         e.preventDefault()
         if (passwordConfirm !== associado.newPassword) {
-            alert('As senhas informadas não conferem!')
+            setSnackbarConfig({ open: true, message: 'As senhas informadas não conferem!', severity: 'warning' })
             return false
         } else {
             try {
-                associadoService.postNoAuth(associado, (success) => {
-                    alert('Associado cadastrado com sucesso!')
-                    window.location.href = '/'
-                }, (error) => {
-                    alert(error)
-                    return false
-                })
+                associadoService.postNoAuth(associado,
+                    (success) => {
+                        window.location.href = '/'
+                        setSnackbarConfig({ open: true, message: 'Associado cadastrado com sucesso!', severity: 'success' })
+                    }, (error) => {
+                        setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                        return false
+                    })
             } catch (error) {
-                console.log(error)
+                setSnackbarConfig({ open: true, message: error, severity: 'error' })
                 return false
             }
         }
@@ -145,6 +148,7 @@ export default function Register() {
                         Cadastrar
                     </Button>
                 </form>
+                <Snackbar config={snackbarConfig} setConfig={setSnackbarConfig} />
             </div>
         </Container>
     )

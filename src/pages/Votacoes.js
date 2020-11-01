@@ -14,6 +14,11 @@ import Header from '../components/Header'
 import Chip from '@material-ui/core/Chip'
 import Divider from '@material-ui/core/Divider'
 import Avatar from '@material-ui/core/Avatar'
+import Snackbar from '../components/Snackbar'
+import SentimentSatisfiedOutlined from '@material-ui/icons/SentimentSatisfiedOutlined'
+import SentimentVeryDissatisfiedOutlined from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
+import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined'
+import ThumbDownAltOutlined from '@material-ui/icons/ThumbDownAltOutlined'
 
 function SkeletonList() {
     return (
@@ -72,6 +77,13 @@ const useStyles = makeStyles((theme) => ({
     },
     accordionIcon: {
         marginLeft: theme.spacing(2)
+    },
+    votouText: {
+        marginTop: theme.spacing(2)
+    },
+    votouIcon: {
+        verticalAlign: 'middle',
+        color: theme.palette.primary
     }
 }))
 
@@ -82,6 +94,8 @@ export default function Votacoes(props) {
     const [votacoes, setVotacoes] = useState([])
     const [votacaoStatus, setVotacaoStatus] = useState(null)
     const [page, setPage] = useState(0)
+    const [associadoVotou, setAssociadoVotou] = useState(false)
+    const [snackbarConfig, setSnackbarConfig] = useState({ open: false, message: '', severity: 'error' })
 
     const handleChange = (panel, prop) => (event, isExpanded) => {
         if (!prop.open) {
@@ -89,6 +103,9 @@ export default function Votacoes(props) {
         } else {
             setVotacaoStatus(null)
         }
+
+        getAssociadoVotou(prop.id)
+
         setExpanded(isExpanded ? panel : false)
     }
 
@@ -96,49 +113,63 @@ export default function Votacoes(props) {
 
     const listVotacoes = () => {
         try {
-            votacaoService.getPagedList(page, (success) => {
-                const content = success.content
+            votacaoService.getPagedList(page,
+                (success) => {
+                    const content = success.content
 
-                content.map(votacao => {
-                    votacao.pauta.titulo = votacao.pauta.titulo.toUpperCase()
-                    setVotacoes(votacoes => [...votacoes, votacao])
+                    content.map(votacao => {
+                        votacao.pauta.titulo = votacao.pauta.titulo.toUpperCase()
+                        setVotacoes(votacoes => [...votacoes, votacao])
+                    })
+
+                    setPage(page + 1)
+                    setHasMore(!success.last)
+                }, (error) => {
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
                 })
-
-                setPage(page + 1)
-                setHasMore(!success.last)
-            }, (error) => {
-                alert(error)
-            })
         } catch (error) {
-            alert(error)
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
         }
     }
 
     const postVoto = (idVotacao, voto) => {
         try {
-            votacaoService.postVoto(idVotacao, props.user.id, voto,
+            votacaoService.postVoto(idVotacao, voto,
                 (success) => {
-                    alert('Voto realizado com sucesso!')
+                    setSnackbarConfig({ open: true, message: 'Voto realizado com sucesso!', severity: 'success' })
+                    getAssociadoVotou(idVotacao)
                 }, (error) => {
-                    alert(error)
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
                 })
         } catch (error) {
-            alert(error)
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
         }
     }
 
     const getVotacaoStatus = (id) => {
         try {
-            votacaoService.getVotacaoStatus(id, (success) => {
-                console.log(success)
-                setVotacaoStatus(success)
-            }, (error) => {
-                alert(error)
-            })
+            votacaoService.getVotacaoStatus(id,
+                (success) => {
+                    setVotacaoStatus(success)
+                }, (error) => {
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                })
         } catch (error) {
-            alert(error)
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
         }
+    }
 
+    const getAssociadoVotou = (id) => {
+        try {
+            votacaoService.getAssociadoVotou(id,
+                (success) => {
+                    setAssociadoVotou(success)
+                }, (error) => {
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                })
+        } catch (error) {
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
+        }
     }
 
     useEffect(() => {
@@ -148,7 +179,7 @@ export default function Votacoes(props) {
 
     return (
         <div className={classes.root}>
-            <Header title="Votações" />
+            <Header title="Sessões de Votação" />
             <InfiniteScroll
                 dataLength={votacoes.length}
                 next={listVotacoes}
@@ -205,35 +236,44 @@ export default function Votacoes(props) {
                                             <b>RESULTADO: </b>{votacaoStatus.resultado}
                                         </Typography>
                                     </React.Fragment>
-                                    :
-                                    <React.Fragment>
-                                        <br />
-                                        <Button
-                                            className={classes.startButton}
-                                            variant="outlined"
-                                            color="primary"
-                                            size="medium"
-                                            onClick={() => { postVoto(prop.id, 'sim') }}
-                                        >
-                                            Votar Sim
-                                    </Button>
-                                        <Button
-                                            className={classes.startButton}
-                                            variant="outlined"
-                                            style={{ color: '#d32f2f', borderColor: '#d32f2f' }}
-                                            color="primary"
-                                            size="medium"
-                                            onClick={() => { postVoto(prop.id, 'nao') }}
-                                        >
-                                            Votar Não
-                                    </Button>
-                                    </React.Fragment>
+                                    : !associadoVotou ?
+                                        <div>
+                                            <br />
+                                            <Button
+                                                className={classes.startButton}
+                                                variant="outlined"
+                                                style={{ color: '#d32f2f', borderColor: '#d32f2f' }}
+                                                size="medium"
+                                                onClick={() => { postVoto(prop.id, 'nao') }}
+                                                endIcon={<ThumbDownAltOutlined />}
+                                            >
+                                                Votar Não
+                                            </Button>
+                                            <Button
+                                                className={classes.startButton}
+                                                variant="outlined"
+                                                color="primary"
+                                                size="medium"
+                                                onClick={() => { postVoto(prop.id, 'sim') }}
+                                                endIcon={<ThumbUpAltOutlined />}
+                                            >
+                                                Votar Sim
+                                            </Button>
+                                        </div>
+                                        : ''
                                 }
+                                <div className={classes.votouText}>
+                                    {associadoVotou ?
+                                        <Typography color="primary">Você votou nesta sessão <SentimentSatisfiedOutlined className={classes.votouIcon} color="primary" /></Typography>
+                                        : votacaoStatus ?
+                                            <Typography color="error">Você não votou nesta sessão <SentimentVeryDissatisfiedOutlined className={classes.votouIcon} /></Typography> : ''}
+                                </div>
                             </div>
                         </AccordionDetails>
                     </Accordion>
                 ))}
             </InfiniteScroll>
+            <Snackbar config={snackbarConfig} setConfig={setSnackbarConfig} />
         </div >
     )
 }

@@ -6,7 +6,7 @@ import HowToVote from '@material-ui/icons/HowToVote'
 const menu = [
     { path: "/", name: "Home", icon: <HomeIcon /> },
     { path: "/pautas", name: "Pautas", icon: <AssignmentIcon /> },
-    { path: "/votacoes", name: "Votações", icon: <HowToVote /> }
+    { path: "/sessoes", name: "Sessões", icon: <HowToVote /> }
 ]
 
 export default menu

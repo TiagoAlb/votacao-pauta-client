@@ -16,8 +16,7 @@ import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import HowToVote from '@material-ui/icons/HowToVote'
 import Header from '../components/Header'
-import Snackbar from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
+import Snackbar from '../components/Snackbar'
 
 function SkeletonList() {
     return (
@@ -70,11 +69,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />
-}
-
-export default function Pautas() {
+export default function Pautas(props) {
     const classes = useStyles()
     const [expanded, setExpanded] = useState(false)
     const [hasMore, setHasMore] = useState(true)
@@ -86,30 +81,27 @@ export default function Pautas() {
         setExpanded(isExpanded ? panel : false)
     }
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return
-        }
-
-        setSnackbarConfig({ open: false, message: '', severity: 'error' })
-    }
-
     const pautaService = new PautaService()
 
     const listPautas = () => {
-        pautaService.getPagedList(page, (success) => {
-            const content = success.content
+        try {
+            pautaService.getPagedList(page,
+                (success) => {
+                    const content = success.content
+                    console.log(content)
+                    content.map(pauta => {
+                        pauta.titulo = pauta.titulo.toUpperCase()
+                        setPautas(pautas => [...pautas, pauta])
+                    })
 
-            content.map(pauta => {
-                pauta.titulo = pauta.titulo.toUpperCase()
-                setPautas(pautas => [...pautas, pauta])
-            })
-
-            setPage(page + 1)
-            setHasMore(!success.last)
-        }, (error) => {
-            alert(error)
-        })
+                    setPage(page + 1)
+                    setHasMore(!success.last)
+                }, (error) => {
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                })
+        } catch (error) {
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
+        }
     }
 
     useEffect(() => {
@@ -161,26 +153,28 @@ export default function Pautas() {
                                 </Typography>
                             </div>
                         </AccordionDetails>
-                        <Divider />
-                        <AccordionActions>
-                            <Button
-                                color="primary"
-                                size="small"
-                                variant="outlined"
-                                href={`pautas/${prop.id}/votacao`}
-                                startIcon={<HowToVote />}
-                            >
-                                Iniciar Votação
-                            </Button>
-                        </AccordionActions>
+                        {!prop.emVotacao && props.user && props.user.permissions.includes('admin') ?
+                            <React.Fragment>
+                                <Divider />
+                                <AccordionActions>
+                                    <Button
+                                        color="primary"
+                                        size="small"
+                                        variant="outlined"
+                                        href={`pautas/${prop.id}/votacao`}
+                                        startIcon={<HowToVote />}
+                                    >
+                                        Iniciar Votação
+                                    </Button>
+                                </AccordionActions>
+                            </React.Fragment>
+                            : ''
+                        }
+
                     </Accordion>
                 ))}
             </InfiniteScroll>
-            <Snackbar open={snackbarConfig.open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={snackbarConfig.severity}>
-                    {snackbarConfig.message}
-                </Alert>
-            </Snackbar>
+            <Snackbar config={snackbarConfig} setConfig={setSnackbarConfig} />
         </div>
     )
 }

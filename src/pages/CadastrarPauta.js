@@ -9,8 +9,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
 import DoneIcon from '@material-ui/icons/Done'
 import Header from '../components/Header'
-import Snackbar from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
+import Snackbar from '../components/Snackbar'
 import PautaService from '../services/PautaService'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,10 +30,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />
-}
-
 export default function CadastrarPauta(props) {
     const classes = useStyles()
     const [pauta, setPauta] = useState({ titulo: '', descricao: '' })
@@ -50,21 +45,12 @@ export default function CadastrarPauta(props) {
         }
     }
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return
-        }
-        setSnackbarConfig({ open: false, message: snackbarConfig.message, severity: snackbarConfig.severity })
-        if (snackbarConfig.severity === 'success') {
-            window.location.href = '/pautas'
-        }
-    }
-
     const postPauta = (e) => {
         e.preventDefault()
         try {
             pautaService.post(pauta,
                 (success) => {
+                    window.location.href = '/pautas'
                     setSnackbarConfig({ open: true, message: 'Pauta criada com sucesso!', severity: 'success' })
                 }, (error) => {
                     setSnackbarConfig({ open: true, message: error, severity: 'error' })
@@ -126,11 +112,7 @@ export default function CadastrarPauta(props) {
                     </form>
                 </CardContent>
             </Card>
-            <Snackbar open={snackbarConfig.open} autoHideDuration={5000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={snackbarConfig.severity}>
-                    {snackbarConfig.message}
-                </Alert>
-            </Snackbar>
+            <Snackbar config={snackbarConfig} setConfig={setSnackbarConfig} />
         </div>
     )
 }

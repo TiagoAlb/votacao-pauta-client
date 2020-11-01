@@ -6,7 +6,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
-import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
@@ -14,6 +13,7 @@ import loginService from '../services/Login'
 import NTConsultLogo from '../assets/img/nt_consult_logo.png'
 import SicrediLogo from '../assets/img/sicredi_logo.png'
 import LinkedInCard from '../components/LinkedInCard'
+import Snackbar from '../components/Snackbar'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -38,18 +38,22 @@ export default function SignIn() {
     const classes = useStyles()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [snackbarConfig, setSnackbarConfig] = useState({ open: false, message: '', severity: 'error' })
 
-    const handleSignIn = () => {
+    const handleSignIn = (e) => {
+        e.preventDefault()
         try {
             loginService.auth(email, password,
                 (success) => {
                     window.location.href = "/"
                 },
                 (error) => {
-                    console.log(error)
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                    return false
                 })
-        } catch (err) {
-            console.log(err)
+        } catch (error) {
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
+            return false
         }
     }
 
@@ -95,12 +99,11 @@ export default function SignIn() {
                         label="Lembrar login"
                     />
                     <Button
-                        type="button"
+                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={handleSignIn}
                     >
                         Sign In
                     </Button>
@@ -113,6 +116,7 @@ export default function SignIn() {
                     </Grid>
                 </form>
             </div>
+            <Snackbar config={snackbarConfig} setConfig={setSnackbarConfig} />
             <LinkedInCard />
         </Container>
     )

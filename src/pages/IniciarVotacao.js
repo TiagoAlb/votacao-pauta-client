@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import PautaService from '../services/PautaService'
 import HowToVote from '@material-ui/icons/HowToVote'
 import TextField from '@material-ui/core/TextField'
+import Snackbar from '../components/Snackbar'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,15 +54,22 @@ export default function IniciarVotacao() {
     const [autor, setAutor] = useState(null)
     const [dateTime, setDateTime] = useState(getDateNow())
     const pautaService = new PautaService()
+    const [snackbarConfig, setSnackbarConfig] = useState({ open: false, message: '', severity: 'error' })
 
     const getPauta = () => {
-        pautaService.get(id, (success) => {
-            success.titulo = success.titulo.toUpperCase()
-            setAutor(success.autor)
-            setPauta(success)
-        }, (error) => {
-            alert(error)
-        })
+        try {
+            pautaService.get(id,
+                (success) => {
+                    success.titulo = success.titulo.toUpperCase()
+                    setAutor(success.autor)
+                    setPauta(success)
+                }, (error) => {
+                    setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                })
+        } catch (error) {
+            setSnackbarConfig({ open: true, message: error, severity: 'error' })
+        }
+
     }
 
     const getMinutes = () => {
@@ -74,16 +82,18 @@ export default function IniciarVotacao() {
     const postVotacao = () => {
         const minutes = getMinutes()
         if (minutes < 1) {
-            alert('O tempo de votação não pode ser menor do que 1 minuto!')
+            setSnackbarConfig({ open: true, message: 'O tempo de votação não pode ser menor do que 1 minuto!', severity: 'warning' })
         } else {
             try {
-                pautaService.postVotacao(id, minutes, (success) => {
-                    alert(success.message)
-                }, (error) => {
-                    alert(error)
-                })
+                pautaService.postVotacao(id, minutes,
+                    (success) => {
+                        window.location.href = '/sessoes'
+                        setSnackbarConfig({ open: true, message: success.message, severity: 'success' })
+                    }, (error) => {
+                        setSnackbarConfig({ open: true, message: error, severity: 'error' })
+                    })
             } catch (error) {
-                alert(error)
+                setSnackbarConfig({ open: true, message: error, severity: 'error' })
             }
         }
     }
@@ -93,49 +103,52 @@ export default function IniciarVotacao() {
     }, [])
 
     return (
-        <Card className={classes.root} variant="outlined">
-            {pauta ?
-                <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Publicada em {new Date(pauta.creation_date).toLocaleDateString()}
-                    </Typography>
-                    <Button
-                        className={classes.startButton}
-                        variant="outlined"
-                        color="primary"
-                        size="medium"
-                        onClick={postVotacao}
-                        startIcon={<HowToVote />}
-                    >
-                        Iniciar Votação
+        <div>
+            <Card className={classes.root} variant="outlined">
+                {pauta ?
+                    <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            Publicada em {new Date(pauta.creation_date).toLocaleDateString()}
+                        </Typography>
+                        <Button
+                            className={classes.startButton}
+                            variant="outlined"
+                            color="primary"
+                            size="medium"
+                            onClick={postVotacao}
+                            startIcon={<HowToVote />}
+                        >
+                            Iniciar Votação
                     </Button>
-                    <TextField
-                        id="datetime-local"
-                        label="Término da votação"
-                        type="datetime-local"
-                        defaultValue={dateTime}
-                        className={classes.textField}
-                        onChange={(e) => {
-                            e.preventDefault()
-                            setDateTime(e.target.value)
-                        }}
-                        size="small"
-                        variant="outlined"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                    <Typography variant="h5" component="h2">
-                        {pauta.titulo}
-                    </Typography>
-                    <Typography className={classes.pos} color="textSecondary">
-                        Autor: {autor.nome}
-                    </Typography>
-                    <Typography className={classes.secondaryHeading}>
-                        {pauta.descricao}
-                    </Typography>
-                </CardContent>
-                : ''}
-        </Card>
+                        <TextField
+                            id="datetime-local"
+                            label="Término da votação"
+                            type="datetime-local"
+                            defaultValue={dateTime}
+                            className={classes.textField}
+                            onChange={(e) => {
+                                e.preventDefault()
+                                setDateTime(e.target.value)
+                            }}
+                            size="small"
+                            variant="outlined"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <Typography variant="h5" component="h2">
+                            {pauta.titulo}
+                        </Typography>
+                        <Typography className={classes.pos} color="textSecondary">
+                            Autor: {autor.nome}
+                        </Typography>
+                        <Typography className={classes.secondaryHeading}>
+                            {pauta.descricao}
+                        </Typography>
+                    </CardContent>
+                    : ''}
+            </Card>
+            <Snackbar config={snackbarConfig} setConfig={setSnackbarConfig} />
+        </div>
     )
 }
