@@ -99,8 +99,7 @@ export default function IniciarVotacao() {
     }
 
     const updateVotacao = () => {
-        console.log(votacao)
-        console.log(votacaoStatus)
+        console.log('aqui')
         if (votacao && !votacaoStatus) {
             getVotacao()
             getAssociadoVotou()
@@ -226,7 +225,7 @@ export default function IniciarVotacao() {
                                             : ''}
                                     </Grid>
                                     <Grid item md={6} xs={12} sm>
-                                        <Timer seconds={getSeconds()} onEnd={updateVotacao()} />
+                                        <Timer seconds={getSeconds()} onEnd={updateVotacao} />
                                     </Grid>
                                 </Grid>
                                 <Grid item container xs={12} justify="center">

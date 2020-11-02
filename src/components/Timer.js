@@ -29,9 +29,9 @@ export default function Timer(props) {
                         : 'Votação encerrada!')}
             </Typography>
             {props.seconds > 0 ?
-                <CountdownTimer onEnd={props.endVoting} count={props.seconds} backgroundColor='transparent' color={red[600]} size={20} responsive />
+                <CountdownTimer onEnd={props.onEnd} count={props.seconds} backgroundColor='transparent' color={red[600]} size={20} responsive />
                 :
-                <CountdownTimer count={0} backgroundColor='transparent' color={red[600]} size={20} responsive />
+                <CountdownTimer onEnd={props.onEnd} count={0} backgroundColor='transparent' color={red[600]} size={20} responsive />
             }
         </div>
     )

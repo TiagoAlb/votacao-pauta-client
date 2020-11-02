@@ -211,7 +211,7 @@ var CountdownTimer =
 
         let timer = setInterval(function () {
           var newCount = _this2.state.count - 1;
-          console.log('AQUI TIMER' + newCount)
+
           if (newCount <= 0) {
             _this2.props.onEnd();
             clearInterval(timer);
