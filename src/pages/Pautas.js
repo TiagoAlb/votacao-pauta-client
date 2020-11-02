@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
-import DoneIcon from '@material-ui/icons/Done'
 import PautaService from '../services/PautaService'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -63,9 +62,6 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         verticalAlign: 'middle',
         textAlign: 'justify'
-    },
-    accordionIcon: {
-        marginLeft: theme.spacing(2)
     }
 }))
 
@@ -88,7 +84,6 @@ export default function Pautas(props) {
             pautaService.getPagedList(page,
                 (success) => {
                     const content = success.content
-                    console.log(content)
                     content.map(pauta => {
                         pauta.titulo = pauta.titulo.toUpperCase()
                         setPautas(pautas => [...pautas, pauta])
@@ -128,7 +123,7 @@ export default function Pautas(props) {
                         expanded={expanded === key}
                         onChange={handleChange(key)} key={key}>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon className={classes.accordionIcon} />}
+                            expandIcon={<ExpandMoreIcon />}
                             aria-controls={key + '-content'}
                             id={key + '-header'}
                         >

@@ -45,6 +45,25 @@ export default class Rest {
             })
     }
 
+    getVotacaoParticipantes(id, page, success, error) {
+        const options = {
+            headers: {
+                'Authorization': loginService.getAuthorization()
+            }
+        }
+
+        axios.get(`${this.url}/${id}/participantes?page=${page}`, options)
+            .then(res => {
+                if (res.status === 200) {
+                    success(res.data)
+                } else {
+                    error(res)
+                }
+            }).catch(err => {
+                error(this.handleCatchError(err))
+            })
+    }
+
     getAssociadoVotou(id, success, error) {
         const options = {
             headers: {

@@ -9,6 +9,7 @@ import PautaService from '../services/PautaService'
 import HowToVote from '@material-ui/icons/HowToVote'
 import TextField from '@material-ui/core/TextField'
 import Snackbar from '../components/Snackbar'
+import Header from '../components/Header'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -104,6 +105,7 @@ export default function IniciarVotacao() {
 
     return (
         <div>
+            <Header title="Iniciar Sessão" />
             <Card className={classes.root} variant="outlined">
                 {pauta ?
                     <CardContent>
@@ -118,7 +120,7 @@ export default function IniciarVotacao() {
                             onClick={postVotacao}
                             startIcon={<HowToVote />}
                         >
-                            Iniciar Votação
+                            Iniciar Sessão
                     </Button>
                         <TextField
                             id="datetime-local"

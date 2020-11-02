@@ -36,25 +36,25 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var CountdownTimer =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(CountdownTimer, _Component);
+  /*#__PURE__*/
+  function (_Component) {
+    _inherits(CountdownTimer, _Component);
 
-  function CountdownTimer(props) {
-    var _this;
+    function CountdownTimer(props) {
+      var _this;
 
-    _classCallCheck(this, CountdownTimer);
+      _classCallCheck(this, CountdownTimer);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CountdownTimer).call(this, props));
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(CountdownTimer).call(this, props));
 
-    _defineProperty(_assertThisInitialized(_this), "handleCountdown", function (seconds) {
-      _this.setState({
-        count: seconds
+      _defineProperty(_assertThisInitialized(_this), "handleCountdown", function (seconds) {
+        _this.setState({
+          count: seconds
+        });
       });
-    });
 
-    _defineProperty(_assertThisInitialized(_this), "format", function (time) {
-      var _this$props = _this.props,
+      _defineProperty(_assertThisInitialized(_this), "format", function (time) {
+        var _this$props = _this.props,
           border = _this$props.border,
           showTitle = _this$props.showTitle,
           direction = _this$props.direction,
@@ -70,173 +70,173 @@ function (_Component) {
           minuteTitle = _this$props.minuteTitle,
           secondTitle = _this$props.secondTitle,
           labelSize = _this$props.labelSize;
-      var seconds = time % 60;
-      var minutes = Math.floor(time / 60) % 60;
-      var hours = Math.floor(time / 3600) % 24;
-      var day = Math.floor(time / 86400);
-      day = day.toString().length === 1 ? "0".concat(day) : day;
-      minutes = Number.parseInt(minutes.toString().length === 1 ? "0".concat(minutes) : minutes);
-      seconds = Number.parseInt(seconds.toString().length === 1 ? "0".concat(seconds) : seconds);
-      hours = hours.toString().length === 1 ? "0".concat(hours) : hours;
+        var seconds = time % 60;
+        var minutes = Math.floor(time / 60) % 60;
+        var hours = Math.floor(time / 3600) % 24;
+        var day = Math.floor(time / 86400);
+        day = day.toString().length === 1 ? "0".concat(day) : day;
+        minutes = Number.parseInt(minutes.toString().length === 1 ? "0".concat(minutes) : minutes);
+        seconds = Number.parseInt(seconds.toString().length === 1 ? "0".concat(seconds) : seconds);
+        hours = hours.toString().length === 1 ? "0".concat(hours) : hours;
 
-      if (showTitle) {
-        var _borderClass = border ? 'border' : '';
+        if (showTitle) {
+          var _borderClass = border ? 'border' : '';
 
-        var _responsiveClass = responsive ? 'responsive' : '';
+          var _responsiveClass = responsive ? 'responsive' : '';
 
-        var _classBox = "countBox ".concat(direction);
+          var _classBox = "countBox ".concat(direction);
 
+          return _react["default"].createElement("div", {
+            style: {
+              fontSize: "".concat(size, "px")
+            },
+            className: "".concat(_classBox, " ").concat(_borderClass, " ").concat(_responsiveClass)
+          }, _react["default"].createElement("div", {
+            className: "countBoxItem"
+          }, _react["default"].createElement("div", {
+            style: {
+              fontSize: "".concat(labelSize, "px")
+            },
+            className: "label"
+          }, secondTitle), _react["default"].createElement("div", {
+            className: "count",
+            style: {
+              color: color,
+              backgroundColor: backgroundColor
+            }
+          }, seconds)), !noPoints && _react["default"].createElement("span", {
+            className: "split"
+          }, ":"), _react["default"].createElement("div", {
+            className: "countBoxItem"
+          }, _react["default"].createElement("div", {
+            style: {
+              fontSize: "".concat(labelSize, "px")
+            },
+            className: "label"
+          }, minuteTitle), _react["default"].createElement("div", {
+            className: "count",
+            style: {
+              color: color,
+              backgroundColor: backgroundColor
+            }
+          }, minutes)), !hideHours && !noPoints && _react["default"].createElement("span", {
+            className: "split"
+          }, ":"), !hideHours && _react["default"].createElement("div", {
+            className: "countBoxItem"
+          }, _react["default"].createElement("div", {
+            style: {
+              fontSize: "".concat(labelSize, "px")
+            },
+            className: "label"
+          }, hourTitle), _react["default"].createElement("div", {
+            className: "count",
+            style: {
+              color: color,
+              backgroundColor: backgroundColor
+            }
+          }, hours)), !hideDay && !noPoints && _react["default"].createElement("span", {
+            className: "split"
+          }, ":"), !hideDay && _react["default"].createElement("div", {
+            className: "countBoxItem"
+          }, _react["default"].createElement("div", {
+            style: {
+              fontSize: "".concat(labelSize, "px")
+            },
+            className: "label"
+          }, dayTitle), _react["default"].createElement("div", {
+            className: "count",
+            style: {
+              color: color,
+              backgroundColor: backgroundColor
+            }
+          }, day)));
+        }
+
+        var borderClass = border ? 'border' : '';
+        var responsiveClass = responsive ? 'responsive' : '';
+        var classBox = "inline ".concat(direction);
         return _react["default"].createElement("div", {
           style: {
             fontSize: "".concat(size, "px")
           },
-          className: "".concat(_classBox, " ").concat(_borderClass, " ").concat(_responsiveClass)
-        }, _react["default"].createElement("div", {
-          className: "countBoxItem"
-        }, _react["default"].createElement("div", {
-          style: {
-            fontSize: "".concat(labelSize, "px")
-          },
-          className: "label"
-        }, secondTitle), _react["default"].createElement("div", {
+          className: "".concat(classBox, " ").concat(borderClass, " ").concat(responsiveClass)
+        }, !hideDay && _react["default"].createElement("span", {
           className: "count",
           style: {
             color: color,
             backgroundColor: backgroundColor
           }
-        }, seconds)), !noPoints && _react["default"].createElement("span", {
+        }, day), !hideDay && !noPoints && _react["default"].createElement("span", {
           className: "split"
-        }, ":"), _react["default"].createElement("div", {
-          className: "countBoxItem"
-        }, _react["default"].createElement("div", {
-          style: {
-            fontSize: "".concat(labelSize, "px")
-          },
-          className: "label"
-        }, minuteTitle), _react["default"].createElement("div", {
+        }, ":"), !hideHours && _react["default"].createElement("span", {
           className: "count",
           style: {
             color: color,
             backgroundColor: backgroundColor
           }
-        }, minutes)), !hideHours && !noPoints && _react["default"].createElement("span", {
+        }, hours), !hideHours && !noPoints && _react["default"].createElement("span", {
           className: "split"
-        }, ":"), !hideHours && _react["default"].createElement("div", {
-          className: "countBoxItem"
-        }, _react["default"].createElement("div", {
-          style: {
-            fontSize: "".concat(labelSize, "px")
-          },
-          className: "label"
-        }, hourTitle), _react["default"].createElement("div", {
+        }, ":"), _react["default"].createElement("span", {
           className: "count",
           style: {
             color: color,
             backgroundColor: backgroundColor
           }
-        }, hours)), !hideDay && !noPoints && _react["default"].createElement("span", {
+        }, minutes), !noPoints && _react["default"].createElement("span", {
           className: "split"
-        }, ":"), !hideDay && _react["default"].createElement("div", {
-          className: "countBoxItem"
-        }, _react["default"].createElement("div", {
-          style: {
-            fontSize: "".concat(labelSize, "px")
-          },
-          className: "label"
-        }, dayTitle), _react["default"].createElement("div", {
+        }, ":"), _react["default"].createElement("span", {
           className: "count",
           style: {
             color: color,
             backgroundColor: backgroundColor
           }
-        }, day)));
+        }, seconds));
+      });
+
+      _this.state = {
+        count: props.count
+      };
+      return _this;
+    }
+
+    _createClass(CountdownTimer, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this.handleStart();
       }
+    }, {
+      key: "handleStart",
+      value: function handleStart() {
+        var _this2 = this;
 
-      var borderClass = border ? 'border' : '';
-      var responsiveClass = responsive ? 'responsive' : '';
-      var classBox = "inline ".concat(direction);
-      return _react["default"].createElement("div", {
-        style: {
-          fontSize: "".concat(size, "px")
-        },
-        className: "".concat(classBox, " ").concat(borderClass, " ").concat(responsiveClass)
-      }, !hideDay && _react["default"].createElement("span", {
-        className: "count",
-        style: {
-          color: color,
-          backgroundColor: backgroundColor
-        }
-      }, day), !hideDay && !noPoints && _react["default"].createElement("span", {
-        className: "split"
-      }, ":"), !hideHours && _react["default"].createElement("span", {
-        className: "count",
-        style: {
-          color: color,
-          backgroundColor: backgroundColor
-        }
-      }, hours), !hideHours && !noPoints && _react["default"].createElement("span", {
-        className: "split"
-      }, ":"), _react["default"].createElement("span", {
-        className: "count",
-        style: {
-          color: color,
-          backgroundColor: backgroundColor
-        }
-      }, minutes), !noPoints && _react["default"].createElement("span", {
-        className: "split"
-      }, ":"), _react["default"].createElement("span", {
-        className: "count",
-        style: {
-          color: color,
-          backgroundColor: backgroundColor
-        }
-      }, seconds));
-    });
+        let timer = setInterval(function () {
+          var newCount = _this2.state.count - 1;
+          console.log('AQUI TIMER' + newCount)
+          if (newCount <= 0) {
+            _this2.props.onEnd();
+            clearInterval(timer);
+          }
 
-    _this.state = {
-      count: props.count
-    };
-    return _this;
-  }
+          _this2.setState({
+            count: newCount >= 0 ? newCount : 0
+          });
+        }, 1000);
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var count = this.state.count;
+        var className = this.props.className;
+        return _react["default"].createElement("div", {
+          className: "root-react-component-countdown-timer ".concat(className)
+        }, _react["default"].createElement("div", {
+          className: "displayedTime"
+        }, this.format(count)));
+      }
+    }]);
 
-  _createClass(CountdownTimer, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.handleStart();
-    }
-  }, {
-    key: "handleStart",
-    value: function handleStart() {
-      var _this2 = this;
-
-      let timer = setInterval(function () {
-        var newCount = _this2.state.count - 1;
-
-        if (newCount === 0) {
-          _this2.props.onEnd();
-          clearInterval(timer);
-        }
-
-        _this2.setState({
-          count: newCount >= 0 ? newCount : 0
-        });
-      }, 1000);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var count = this.state.count;
-      var className = this.props.className;
-      return _react["default"].createElement("div", {
-        className: "root-react-component-countdown-timer ".concat(className)
-      }, _react["default"].createElement("div", {
-        className: "displayedTime"
-      }, this.format(count)));
-    }
-  }]);
-
-  return CountdownTimer;
-}(_react.Component);
+    return CountdownTimer;
+  }(_react.Component);
 
 exports["default"] = CountdownTimer;
 
@@ -279,5 +279,5 @@ _defineProperty(CountdownTimer, "defaultProps", {
   minuteTitle: 'Min',
   secondTitle: 'Sec',
   className: '',
-  onEnd: function onEnd() {}
+  onEnd: function onEnd() { }
 });

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
+import AccordionActions from '@material-ui/core/AccordionActions'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import VotacaoService from '../services/VotacaoService'
@@ -16,9 +17,8 @@ import Divider from '@material-ui/core/Divider'
 import Avatar from '@material-ui/core/Avatar'
 import Snackbar from '../components/Snackbar'
 import SentimentSatisfiedOutlined from '@material-ui/icons/SentimentSatisfiedOutlined'
-import SentimentVeryDissatisfiedOutlined from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
-import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined'
-import ThumbDownAltOutlined from '@material-ui/icons/ThumbDownAltOutlined'
+import SentimentVeryDissatisfied from '@material-ui/icons/SentimentVeryDissatisfied'
+import ExitToApp from '@material-ui/icons/ExitToApp'
 
 function SkeletonList() {
     return (
@@ -75,9 +75,6 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: '#d32f2f'
         }
     },
-    accordionIcon: {
-        marginLeft: theme.spacing(2)
-    },
     votouText: {
         marginTop: theme.spacing(2)
     },
@@ -105,7 +102,6 @@ export default function Votacoes(props) {
         }
 
         getAssociadoVotou(prop.id)
-
         setExpanded(isExpanded ? panel : false)
     }
 
@@ -196,7 +192,7 @@ export default function Votacoes(props) {
                         expanded={expanded === key}
                         onChange={handleChange(key, prop)} key={key}>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon className={classes.accordionIcon} />}
+                            expandIcon={<ExpandMoreIcon />}
                             aria-controls={key + '-content'}
                             id={key + '-header'}
                         >
@@ -225,51 +221,28 @@ export default function Votacoes(props) {
                                         <Typography className={classes.secondaryHeading}>
                                             Sessão encerrada em {new Date(prop.end_date).toLocaleDateString()} às {new Date(prop.end_date).toLocaleTimeString()}
                                         </Typography>
-                                        <br />
-                                        <Typography className={classes.secondaryHeading}>
-                                            <b>VOTOS FAVORÁVEIS: </b>{votacaoStatus.qtdSim}
-                                        </Typography>
-                                        <Typography className={classes.secondaryHeading}>
-                                            <b>VOTOS CONTRÁRIOS: </b>{votacaoStatus.qtdNao}
-                                        </Typography>
-                                        <Typography className={classes.secondaryHeading}>
-                                            <b>RESULTADO: </b>{votacaoStatus.resultado}
-                                        </Typography>
                                     </React.Fragment>
-                                    : !associadoVotou ?
-                                        <div>
-                                            <br />
-                                            <Button
-                                                className={classes.startButton}
-                                                variant="outlined"
-                                                style={{ color: '#d32f2f', borderColor: '#d32f2f' }}
-                                                size="medium"
-                                                onClick={() => { postVoto(prop.id, 'nao') }}
-                                                endIcon={<ThumbDownAltOutlined />}
-                                            >
-                                                Votar Não
-                                            </Button>
-                                            <Button
-                                                className={classes.startButton}
-                                                variant="outlined"
-                                                color="primary"
-                                                size="medium"
-                                                onClick={() => { postVoto(prop.id, 'sim') }}
-                                                endIcon={<ThumbUpAltOutlined />}
-                                            >
-                                                Votar Sim
-                                            </Button>
-                                        </div>
-                                        : ''
-                                }
+                                    : ''}
                                 <div className={classes.votouText}>
                                     {associadoVotou ?
                                         <Typography color="primary">Você votou nesta sessão <SentimentSatisfiedOutlined className={classes.votouIcon} color="primary" /></Typography>
                                         : votacaoStatus ?
-                                            <Typography color="error">Você não votou nesta sessão <SentimentVeryDissatisfiedOutlined className={classes.votouIcon} /></Typography> : ''}
+                                            <Typography color="error">Você não votou nesta sessão <SentimentVeryDissatisfied className={classes.votouIcon} /></Typography> : ''}
                                 </div>
                             </div>
                         </AccordionDetails>
+                        <Divider />
+                        <AccordionActions>
+                            <Button
+                                color="primary"
+                                size="small"
+                                variant="outlined"
+                                href={`sessoes/${prop.id}`}
+                                startIcon={<ExitToApp />}
+                            >
+                                Entrar
+                                    </Button>
+                        </AccordionActions>
                     </Accordion>
                 ))}
             </InfiniteScroll>
