@@ -99,14 +99,9 @@ export default function IniciarVotacao() {
     }
 
     const updateVotacao = () => {
-        console.log('aqui')
         if (votacao && !votacaoStatus) {
             getVotacao()
             getAssociadoVotou()
-            setParticipantes([])
-            setHasMore(true)
-            setPage(0)
-            getVotacaoParticipantes()
         }
     }
 
