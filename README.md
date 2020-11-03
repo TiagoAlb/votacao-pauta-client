@@ -1,5 +1,5 @@
 # Votação Pauta
-Link do repositório front-end: https://github.com/Tiagoalbuquerque2302/votacao-pauta-client
+Link do repositório back-end: https://github.com/Tiagoalbuquerque2302/votacao-pauta-server
 
 ## Servidor de aplicação
 Foi configurado o projeto em um servidor externo, para facilitar os testes da equipe. 
